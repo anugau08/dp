@@ -1,0 +1,52 @@
+clc;                       % Clear the command window
+close all;                 % Close all open figure windows
+clear all;                 % Clear all variables from the workspace
+
+figure(1);                 % Create a new figure
+
+% Step 1: Show the original image
+A = imread('blood.bmp');   % Read the input image "blood.bmp"
+subplot(2,2,1);            % Create the first subplot
+imshow(A);                 % Display the original image
+title('Original Image');   % Title for the original image
+
+% Step 2: Plot the histogram of the original image
+B = imhist(A);             % Compute the histogram of the original image
+subplot(2,2,2);            % Create the second subplot
+stem(B);                   % Plot the histogram using a stem plot
+title('Histogram of Original Image'); % Title for the histogram
+
+% Step 3: Get the dimensions of the image
+[M,N] = size(A);           % Get the size of the image (rows and columns)
+
+% Step 4: Process the image pixel by pixel
+for x = 1:M                % Loop through each row of the image
+    for y = 1:N            % Loop through each column of the image
+        % Assign red color for intensity values between 0 and 100
+        if 0 <= A(x,y) && A(x,y) <= 100
+            r(x,y) = 255;  % Set red channel to maximum intensity
+            b(x,y) = 0;    % Set blue channel to zero
+            g(x,y) = 0;    % Set green channel to zero
+       
+        % Assign blue color for intensity values between 101 and 180
+        elseif 101 <= A(x,y) && A(x,y) <= 180
+            r(x,y) = 0;    % Set red channel to zero
+            b(x,y) = 255;  % Set blue channel to maximum intensity
+            g(x,y) = 0;    % Set green channel to zero
+       
+        % Assign green color for intensity values between 181 and 255
+        elseif 181 <= A(x,y) && A(x,y) <= 255
+            r(x,y) = 0;    % Set red channel to zero
+            b(x,y) = 0;    % Set blue channel to zero
+            g(x,y) = 255;  % Set green channel to maximum intensity
+        end
+    end
+end
+
+% Step 5: Combine the processed red, green, and blue channels
+final = cat(3, r, g, b);   % Concatenate the RGB channels to create a color image
+
+% Step 6: Display the final processed image
+subplot(2,2,3);            % Create the third subplot
+imshow(final);             % Display the color-coded image
+title('Color-Coded Image'); % Title for the processed image
