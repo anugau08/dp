@@ -1,0 +1,41 @@
+clc;
+clear all;
+close all;
+figure(1);
+% Read and Display the original image
+img = imread("/MATLAB Drive/lena.png");
+subplot(2,2,1);
+imshow(img);
+title('Original image');
+% Create a Point Spread Function (PSF) for motion blur
+PSF = fspecial('motion', 30, 25);
+% Converting the image to double precision for better accuracy during filtering
+i2 = im2double(img);
+% Applying the motion blur to the image using the PSF with circular boundary conditions
+motionblur = imfilter(i2, PSF, 'conv', 'circular');
+subplot(2,2,2);
+imshow(motionblur);
+title('Motion blurred Image');
+% Restore the motion blurred image using Wiener deconvolution
+restoredimage = deconvwnr(motionblur, PSF);
+subplot(2,2,3);
+imshow(restoredimage);
+title('Restored image');
+% Evaluate the performance of the restored image by calculating PSNR and SSIM
+% PSNR (Peak Signal-to-Noise Ratio) is calculated between the restored image and the original image (i2). A higher PSNR generally indicates better restoration quality.
+PSNR = psnr(restoredimage, i2);
+% SSIM (Structural Similarity Index) is calculated between the restored image and the original image. It measures the similarity in structure, luminance, and contrast.
+SSIM = ssim(restoredimage, i2);
+% Display the PSNR and SSIM values for comparison between original and restored images
+disp('PSNR of original and restored image:');
+disp(PSNR);
+disp('SSIM of original and restored image: ');
+disp(SSIM);
+% Evaluate the performance of the restored image by calculating PSNR and SSIM but this time between the motion-blurred image and the restored image
+PSNR = psnr(restoredimage, motionblur);
+SSIM = ssim(restoredimage, motionblur);
+% Display the PSNR and SSIM values for comparison between motion blurred and restored images
+disp('PSNR of original and motion blurred image:');
+disp(PSNR);
+disp('SSIM of original and motion blurred image: ');
+disp(SSIM);
