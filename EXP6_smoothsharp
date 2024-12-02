@@ -1,0 +1,76 @@
+clc;                        % Clear the command window
+close all;                  % Close all open figure windows
+clear all;                  % Clear all variables from the workspace
+
+figure(1);                  % Open a new figure
+% Step 1: Display the original image
+A = imread('ELIZA.bmp');    % Read the input image "ELIZA.bmp"
+subplot(2,2,1);             % Create the first subplot
+imshow(A);                  % Display the original image
+title('Original Image');    % Title for the original image
+
+% Step 2: Add salt-and-pepper noise to the image
+J = imnoise(A, 'salt & pepper', 0.02); % Add salt-and-pepper noise with 2% noise density
+subplot(2,2,2);             % Create the second subplot
+imshow(J);                  % Display the noisy image
+title('SALT AND PEPPER NOISE'); % Title for the noisy image
+
+% Step 3: Apply box filter to reduce noise
+c = (1/9)*[1, 1, 1;         % Define a 3x3 box filter
+           1, 1, 1;
+           1, 1, 1];
+f = imfilter(J, c);          % Apply the box filter to the noisy image
+subplot(2,2,3);             % Create the third subplot
+imshow(f);                  % Display the filtered image
+title('BOX FILTER');        % Title for the box-filtered image
+
+% Step 4: Apply median filter to reduce noise
+K = medfilt2(J, [3, 3]);    % Apply a 3x3 median filter to the noisy image
+subplot(2,2,4);             % Create the fourth subplot
+imshow(K);                  % Display the median-filtered image
+title('MEDIAN FILTER');     % Title for the median-filtered image
+
+% Create a second figure for Sobel filters
+figure(2);                  % Open another figure
+
+% Step 5: Display the original image again
+subplot(2,2,1);             % Create the first subplot
+imshow(A);                  % Display the original image
+title('Original Image');    % Title for the original image
+
+% Step 6: Convert the image to double precision
+D = im2double(A);           % Convert the image to double precision
+
+% Step 7: Initialize Sobel gradient matrices
+[m, n] = size(D);           % Get the size of the image
+ims_RX(m, n) = 0;           % Initialize the gradient in the X direction
+ims_RY(m, n) = 0;           % Initialize the gradient in the Y direction
+
+% Step 8: Apply Sobel filter in the Y direction (G_Y)
+for i = 1:m-2               % Loop through rows
+    for j = 1:n-2           % Loop through columns
+        ims_RY(i, j) = ((-1)*D(i, j)) + 0 + (1)*D(i, j+2) + ...
+                      ((-2)*D(i+1, j)) + (2)*D(i+1, j+2) + ...
+                      ((-1)*D(i+2, j)) + (1)*D(i+2, j+2);
+    end
+end
+subplot(2,2,2);             % Create the second subplot
+imshow(ims_RY);             % Display the Sobel gradient in the Y direction
+title("Sobel's Filter G_Y"); % Title for G_Y
+
+% Step 9: Apply Sobel filter in the X direction (G_X)
+for i = 1:m-2               % Loop through rows
+    for j = 1:n-2           % Loop through columns
+        ims_RX(i, j) = ((-1)*D(i, j)) + ((-2)*D(i, j+1)) + ((-1)*D(i, j+2)) + ...
+                       (1)*D(i+2, j) + (2)*D(i+2, j+1) + (1)*D(i+2, j+2);
+    end
+end
+subplot(2,2,3);             % Create the third subplot
+imshow(ims_RX);             % Display the Sobel gradient in the X direction
+title("Sobel's Filter G_X"); % Title for G_X
+
+% Step 10: Combine G_X and G_Y to get the overall gradient magnitude
+G = ims_RX + ims_RY;        % Combine the gradients in X and Y directions
+subplot(2,2,4);             % Create the fourth subplot
+imshow(G);                  % Display the overall gradient magnitude
+title("Sobel's Filter");    % Title for the overall Sobel filter result
