@@ -1,0 +1,49 @@
+clc;                         % Clear the command window
+close all;                   % Close all figure windows
+clear all;                   % Clear all variables from the workspace
+figure(1);                   % Create a new figure
+A = imread("PG1.BMP");       % Read the image "PG1.BMP"
+subplot(2,2,1);              % Create the first subplot
+imshow(A);                   % Display the original image
+title("Original Image");     % Title for the original image
+
+B = imhist(A);               % Compute the histogram of the original image
+subplot(2,2,2);              % Create the second subplot
+stem(B);                     % Plot the histogram as a stem plot
+title("Histogram of Original Image"); % Title for the histogram
+
+C = histeq(A);               % Perform histogram equalization on the image
+subplot(2,2,3);              % Create the third subplot
+imshow(C);                   % Display the histogram-equalized image
+title("Equalized Image");    % Title for the equalized image
+
+D = imhist(C);               % Compute the histogram of the equalized image
+subplot(2,2,4);              % Create the fourth subplot
+stem(D);                     % Plot the histogram of the equalized image as a stem plot
+title("Histogram of Equalized Image"); % Title for the equalized histogram
+
+%dct_idct part B
+close all;                     % Close all open figure windows
+% FIGURE 1: DISPLAY ORIGINAL IMAGE, DCT, AND IDCT
+figure(1);                     % Open a new figure window
+
+% Step 1: Read and display the original image
+E = imread("ELIZA.bmp");       % Read the image file "ELIZA.bmp"
+subplot(2,2,1);                % Create a subplot for the original image
+imshow(E);                     % Display the original image
+title("Original Image");       % Set the title of the subplot
+
+% Step 2: Convert the image to double precision
+F = im2double(E);              % Convert the original image to double precision for computation
+
+% Step 3: Perform the Discrete Cosine Transform (DCT)
+G = dct2(F);                   % Apply 2D Discrete Cosine Transform (DCT) to the double image
+subplot(2,2,2);                % Create a subplot for the DCT image
+imshow(log(abs(G)), []);       % Display the DCT coefficients (use log scale for better visualization)
+title("DCT Image");            % Set the title of the subplot
+
+% Step 4: Perform the Inverse Discrete Cosine Transform (IDCT)
+H = idct2(G);                  % Apply 2D Inverse Discrete Cosine Transform (IDCT) to reconstruct the image
+subplot(2,2,3);                % Create a subplot for the IDCT image
+imshow(H);                     % Display the reconstructed image after IDCT
+title("IDCT Image");           % Set the title of the subplot
