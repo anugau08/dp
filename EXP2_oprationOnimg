@@ -1,0 +1,115 @@
+clc;                     % Clear the command window
+close all;               % Close all figure windows
+clear all;               % Clear all variables from the workspace
+
+% FIGURE 1: DISPLAY ORIGINAL IMAGE AND ITS COLOR CHANNELS
+figure(1);               % Open a new figure window
+img = imread("FLOWER.BMP"); % Read the image file "FLOWER.BMP"
+red = img(:,:,1);        % Extract the red channel
+green = img(:,:,2);      % Extract the green channel
+blue = img(:,:,3);       % Extract the blue channel
+
+% Display the original image
+subplot(2,2,1);
+imshow(img);
+title('Original Image');
+
+% Display the red channel
+subplot(2,2,2);
+imshow(red);
+title('Red Channel');
+
+% Display the green channel
+subplot(2,2,3);
+imshow(green);
+title('Green Channel');
+
+% Display the blue channel
+subplot(2,2,4);
+imshow(blue);
+title('Blue Channel');
+
+% FIGURE 2: CONVERT TO BINARY AND PERFORM ARITHMETIC OPERATIONS
+figure(2);               % Open a new figure window
+
+% Convert red channel to binary
+red = img(:,:,1);        
+B = im2bw(red);          % Convert red channel to binary (logical)
+subplot(2,2,1);
+imshow(B);
+title("Red Binary");
+
+% Convert blue channel to binary
+blue = img(:,:,3);      
+C = im2bw(blue);         % Convert blue channel to binary (logical)
+subplot(2,2,2);
+imshow(C);
+title("Blue Binary");
+
+% Perform addition of binary images
+add = imadd(B,C);        % Add red and blue binary images
+subplot(2,2,3);
+imshow(add);
+title("Addition");
+
+% Perform subtraction of binary images
+sub = imsubtract(B,C);   % Subtract blue binary from red binary
+subplot(2,2,4);
+imshow(sub);
+title("Subtraction");
+
+% FIGURE 3: PERFORM LOGICAL OPERATIONS
+figure(3);               % Open a new figure window
+
+% Convert red channel to binary
+red = img(:,:,1);        
+B = im2bw(red);          % Convert red channel to binary
+subplot(2,2,1);
+imshow(B);
+title("Red Binary");
+
+% Convert blue channel to binary
+blue = img(:,:,3);      
+C = im2bw(blue);         % Convert blue channel to binary
+subplot(2,2,2);
+imshow(C);
+title("Blue Binary");
+
+% Perform bitwise AND operation
+B_and = bitand(B,C);     % Perform logical AND on red and blue binaries
+subplot(2,2,3);
+imshow(B_and);
+title("Bitwise AND");
+
+% Perform bitwise OR operation
+B_or = bitor(B,C);       % Perform logical OR on red and blue binaries
+subplot(2,2,4);
+imshow(B_or);
+title("Bitwise OR");
+
+% FIGURE 4: IMAGE COMPLEMENT, ROTATION, RESIZING
+figure(4);               % Open a new figure window
+
+% Complement of the image
+x = imcomplement(img);   % Create the complement of the image
+subplot(2,2,1);
+imshow(x);
+title("Complement");
+
+% Rotate the image by 30 degrees
+s = imrotate(img,30);    % Rotate the image by 30 degrees
+subplot(2,2,2);
+imshow(s);
+title("Rotation");
+
+% Resize the image to 30% of its original size
+y = imresize(img,0.3);   % Compress the image by resizing to 30%
+subplot(2,2,3);
+imshow(y);
+title("Compress");
+
+% Resize the image to a specific dimension (100x150 pixels)
+z = imresize(img,[100 150]); % Expand the image to specific dimensions
+subplot(2,2,4);
+imshow(z);
+title("Expand");
